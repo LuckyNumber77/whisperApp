@@ -68,3 +68,22 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# Firebase sensitive files
+firebase-service-account.json
+.env
+.env.local
+.env.*.local
+firebase-debug.log
+
+# Node modules and build folders
+node_modules/
+www/
+android/
+ios/
+
+# VSCode config (optional)
+.vscode/
+
+# Mac system files
+.DS_Store
