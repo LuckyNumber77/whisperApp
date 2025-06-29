@@ -87,3 +87,10 @@ ios/
 
 # Mac system files
 .DS_Store
+
+
+# Environment files
+/src/environments/environment.ts
+/src/environments/environment.prod.ts
+/src/environments/environment.dev.ts
+/src/environments/environment.staging.ts    
