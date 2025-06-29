@@ -1,20 +1,94 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Whisper</ion-title>
+    <ion-buttons slot="end">
+      <ion-button color="danger" (click)="logout()">Logout</ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+<ion-content class="ion-padding gradient-background">
+  <!-- Logo -->
+  <div class="logo-container">
+    <img src="assets/icon/whisper-logo.jpg" alt="Whisper Logo" class="logo animated-logo" />
   </div>
+
+  <h2 class="welcome-title">Welcome to Whisper</h2>
+  <p class="welcome-text">
+    A discreet safety platform to help women recognize early signs of abuse and find support privately.
+  </p>
+
+  <ion-button expand="block" color="danger" class="animated-button">Learn More</ion-button>
+
+  <!-- Location Search -->
+  <ion-item>
+    <ion-label position="floating">Enter Location</ion-label>
+    <ion-input [(ngModel)]="searchQuery" (ionInput)="onSearchInput($event)" placeholder="e.g., Toronto"></ion-input>
+  </ion-item>
+  <ion-list *ngIf="suggestions.length > 0" class="suggestion-list">
+    <ion-item *ngFor="let suggestion of suggestions" (click)="selectLocation(suggestion)">
+      {{ suggestion.displayName }}
+    </ion-item>
+  </ion-list>
+  <ion-button expand="block" (click)="search()" class="animated-button">Search</ion-button>
+
+  <!-- Radius Slider -->
+  <ion-item>
+    <ion-label>Radius: {{ radius }} km</ion-label>
+    <ion-range min="1" max="20" value="5" pin="true" [(ngModel)]="radius"></ion-range>
+  </ion-item>
+
+  <!-- Toggle View -->
+  <ion-segment [(ngModel)]="viewMode">
+    <ion-segment-button value="list">List</ion-segment-button>
+    <ion-segment-button value="map">Map</ion-segment-button>
+  </ion-segment>
+
+  <!-- List View -->
+  <div *ngIf="viewMode === 'list'">
+    <ion-list *ngIf="threats.length > 0" class="threat-list">
+      <ion-item *ngFor="let threat of threats | slice:0:6">
+        {{ threat.description }} ({{ threat.distance }} km)
+      </ion-item>
+    </ion-list>
+    <p *ngIf="threats.length === 0">No threats found.</p>
+  </div>
+
+  <!-- Map View (Placeholder) -->
+  <div *ngIf="viewMode === 'map'" id="map" style="height: 300px;"></div>
+
+  <!-- Existing Cards -->
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12">
+        <ion-card class="info-card">
+          <ion-card-header>
+            <ion-card-title>Your Coordinates</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            {{ coords }}
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col size="12">
+        <ion-card class="info-card">
+          <ion-card-header>
+            <ion-card-title>Detected Location</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            {{ locationInfo }}
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-button expand="block" color="primary" (click)="getLocation()" class="animated-button">Refresh Location</ion-button>
+  <ion-button expand="block" color="danger" (click)="sendAlert()" class="animated-button">Send Emergency Alert</ion-button>
 </ion-content>
+
+<ion-footer>
+  <ion-toolbar color="primary">
+    <ion-title class="text-center">© 2025 Whisper</ion-title>
+  </ion-toolbar>
+</ion-footer>
